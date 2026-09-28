@@ -7,7 +7,7 @@
             "id": "dc8e010d-0a6a-40e8-becd-82b40f53d590",
             "actions": [
                 {
-                    "name": "jump",
+                    "name": "Jump",
                     "type": "Button",
                     "id": "1bb340b1-a1d5-40be-b91b-6d1592255e3a",
                     "expectedControlType": "",
@@ -17,7 +17,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "movement",
+                    "name": "Movement",
                     "type": "Value",
                     "id": "3b0179b3-1ae3-4278-a8bd-d80d46f100b9",
                     "expectedControlType": "Vector2",
@@ -27,7 +27,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "look",
+                    "name": "Look",
                     "type": "Value",
                     "id": "5edde712-ed82-4320-92ff-ee07d796f84a",
                     "expectedControlType": "",
@@ -45,7 +45,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "jump",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -56,7 +56,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "movement",
+                    "action": "Movement",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -67,7 +67,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "movement",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -78,7 +78,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "movement",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -89,7 +89,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "movement",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -100,7 +100,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "movement",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -111,7 +111,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "look",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
