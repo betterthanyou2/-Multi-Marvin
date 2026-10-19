@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyAI))]
 public class EnemyPossession : MonoBehaviour, IPossessable
 {
     private bool isPossessed = false;
