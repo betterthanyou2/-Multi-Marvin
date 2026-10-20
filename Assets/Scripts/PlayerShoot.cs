@@ -1,25 +1,40 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerShoot : MonoBehaviour
 {
-    public GameObject bulletPrefab;
-    public float bulletSpeed = 10f;
+    [Header("Shooting Settings")]
+    public float damage = 10f;
+    public float range = 100f;
+    public float fireRate = 0.2f; 
 
-    private GameObject bulletSpawn;
+    [Header("References")]
+    public Camera playerCamera; 
+    public Transform firePoint; 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        bulletSpawn = GameObject.Find("BulletSpawn");
-    }
+    private float nextTimeToFire = 0f;
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if (Mouse.current == null) return;
+
+        if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= nextTimeToFire)
         {
-            GameObject tempBullet = Instantiate(bulletPrefab, bulletSpawn.transform.position, Quaternion.identity);
-            tempBullet.GetComponent<Rigidbody>().linearVelocity = bulletSpawn.transform.up * bulletSpeed;
+            nextTimeToFire = Time.time + fireRate;
+
+            Shoot();
+        }
+    }
+
+    void Shoot()
+    {
+        Debug.Log("Fired Weapon!");
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
+        {
+            Debug.Log("Hit object: " + hit.transform.name);
         }
     }
 }

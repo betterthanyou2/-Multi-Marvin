@@ -56,10 +56,17 @@ public class EnemyAI : MonoBehaviour, IDamageable
         else if (distance <= detectionRange) state = State.Chase;
         else state = State.Idle;
 
+        // CRITICAL FIX: Ensure agent is initialized, enabled, and physically standing on a baked NavMesh floor
+        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
+
         switch (state)
         {
             case State.Idle:
-                agent.ResetPath();
+                // Only reset path if the agent is actively calculating or moving to prevent spamming
+                if (agent.hasPath || agent.pathPending)
+                {
+                    agent.ResetPath();
+                }
                 break;
 
             case State.Chase:
@@ -67,12 +74,16 @@ public class EnemyAI : MonoBehaviour, IDamageable
                 break;
 
             case State.Attack:
-                agent.ResetPath();
+                if (agent.hasPath || agent.pathPending)
+                {
+                    agent.ResetPath();
+                }
                 FaceTarget();
                 TryAttack();
                 break;
         }
     }
+
 
     private void FaceTarget()
     {
