@@ -868,6 +868,7 @@ MonoBehaviour:
   fireRate: 0.2
   playerCamera: {fileID: 330585545}
   firePoint: {fileID: 372691925}
+  player: {fileID: 0}
 --- !u!1 &1929801306
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,6 +1026,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1960412641
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.6177506
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.699711
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
+      propertyPath: m_Name
+      value: HandWatchAnimExport
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5dd38b0e27b88fb4f86ec002c74d452a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1034,3 +1092,4 @@ SceneRoots:
   - {fileID: 1688212710}
   - {fileID: 1056071165}
   - {fileID: 1929801312}
+  - {fileID: 1960412641}
