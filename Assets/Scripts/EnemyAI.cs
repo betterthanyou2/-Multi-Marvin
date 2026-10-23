@@ -48,40 +48,40 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        if (state == State.Dead || target == null) return;
+    //    if (state == State.Dead || target == null) return;
 
-        float distance = Vector3.Distance(transform.position, target.position);
+    //    float distance = Vector3.Distance(transform.position, target.position);
 
-        if (distance <= attackRange) state = State.Attack;
-        else if (distance <= detectionRange) state = State.Chase;
-        else state = State.Idle;
+    //    if (distance <= attackRange) state = State.Attack;
+    //    else if (distance <= detectionRange) state = State.Chase;
+    //    else state = State.Idle;
 
-        // CRITICAL FIX: Ensure agent is initialized, enabled, and physically standing on a baked NavMesh floor
-        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
+    //    // CRITICAL FIX: Ensure agent is initialized, enabled, and physically standing on a baked NavMesh floor
+    //    if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
 
-        switch (state)
-        {
-            case State.Idle:
-                // Only reset path if the agent is actively calculating or moving to prevent spamming
-                if (agent.hasPath || agent.pathPending)
-                {
-                    agent.ResetPath();
-                }
-                break;
+    //    switch (state)
+    //    {
+    //        case State.Idle:
+    //            // Only reset path if the agent is actively calculating or moving to prevent spamming
+    //            if (agent.hasPath || agent.pathPending)
+    //            {
+    //                agent.ResetPath();
+    //            }
+    //            break;
 
-            case State.Chase:
-                agent.SetDestination(target.position);
-                break;
+    //        case State.Chase:
+    //            agent.SetDestination(target.position);
+    //            break;
 
-            case State.Attack:
-                if (agent.hasPath || agent.pathPending)
-                {
-                    agent.ResetPath();
-                }
-                FaceTarget();
-                TryAttack();
-                break;
-        }
+    //        case State.Attack:
+    //            if (agent.hasPath || agent.pathPending)
+    //            {
+    //                agent.ResetPath();
+    //            }
+    //            FaceTarget();
+    //            TryAttack();
+    //            break;
+    //    }
     }
 
 
