@@ -863,12 +863,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19237d4cca6f07b4089c27c259827d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShoot
-  damage: 1
+  damage: 10
   range: 100
   fireRate: 0.2
   playerCamera: {fileID: 330585545}
-  firePoint: {fileID: 372691925}
-  player: {fileID: 0}
 --- !u!1 &1929801306
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,7 +944,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2

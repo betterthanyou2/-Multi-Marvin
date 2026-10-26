@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public interface IDamageable
 {
     void TakeDamage(float amount);
@@ -9,6 +10,8 @@ public interface IDamageable
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyAI : MonoBehaviour, IDamageable
 {
+    private float currentHealth;
+    private bool isDead;
     private enum State { Idle, Chase, Attack, Dead }
 
     [Header("Stats")]
@@ -43,6 +46,9 @@ public class EnemyAI : MonoBehaviour, IDamageable
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null) target = player.transform;
+        }
+        {
+            currentHealth = maxHealth;
         }
     }
 
@@ -108,18 +114,20 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
     public void TakeDamage(float amount)
     {
-        if (state == State.Dead) return;
+        Debug.Log($"TakeDamage called on {name}, amount: {amount}, health before: {currentHealth}");
+        if (isDead) return;
 
-        health -= amount;
-        if (health <= 0f) Die();
+        currentHealth -= amount;
+        Debug.Log($"{name} health: {currentHealth}");
+
+        if (currentHealth <= 0f)
+            Die();
     }
 
-    private void Die()
+    void Die()
     {
-        state = State.Dead;
-        agent.enabled = false;
-        if (TryGetComponent(out Collider col)) col.enabled = false;
-        Destroy(gameObject, 2f);
+        isDead = true;
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()

@@ -10,24 +10,22 @@ public class PlayerShoot : MonoBehaviour
 
     [Header("References")]
     public Camera playerCamera;
-    public Transform firePoint;
-    public GameObject player;
 
     private float nextTimeToFire = 0f;
-    private void Start()
+
+    void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        if (playerCamera == null)
+            playerCamera = Camera.main;
     }
 
     void Update()
     {
-        firePoint = player.transform;
         if (Mouse.current == null) return;
 
         if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + fireRate;
-
             Shoot();
         }
     }
@@ -36,11 +34,21 @@ public class PlayerShoot : MonoBehaviour
     {
         Debug.Log("Fired Weapon!");
 
-        RaycastHit hit;
-        Debug.DrawRay(firePoint.position + firePoint.transform.forward * 2, firePoint.transform.forward * range, Color.red, 1f);
-        if (Physics.Raycast(firePoint.position, firePoint.transform.forward, out hit, range))
+        Vector3 origin = playerCamera.transform.position;
+        Vector3 direction = playerCamera.transform.forward;
+
+        Debug.DrawRay(origin, direction * range, Color.red, 1f);
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, range))
         {
             Debug.Log("Hit object: " + hit.transform.name);
+
+            IDamageable target = hit.collider.GetComponentInParent<IDamageable>();
+            if (target != null)
+            {
+                target.TakeDamage(damage);
+                Debug.Log("Damaged " + hit.transform.name);
+            }
         }
     }
 }
