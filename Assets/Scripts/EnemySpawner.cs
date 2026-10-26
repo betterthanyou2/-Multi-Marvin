@@ -17,6 +17,11 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(spawnEnemy(bigSwarmerInterval, bigSwarmerPrefab));
     }
 
+    private void StartCoroutine(IEnumerable enumerable)
+    {
+        throw new System.NotImplementedException();
+    }
+
     private IEnumerable spawnEnemy(float interval, GameObject enemy)
     {
         yield return new WaitForSeconds(interval);
