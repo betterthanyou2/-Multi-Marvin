@@ -1,46 +1,42 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerShoot : MonoBehaviour
+public class PlayerShoot : Ability
 {
     [Header("Shooting Settings")]
     public float damage = 10f;
     public float range = 100f;
-    public float fireRate = 0.2f;
+    [Tooltip("Layers the shot can hit.")]
+    public LayerMask hitMask = ~0;
 
-    [Header("References")]
-    public Camera playerCamera;
-
-    private float nextTimeToFire = 0f;
-
-    void Start()
+    void Reset()
     {
-        if (playerCamera == null)
-            playerCamera = Camera.main;
+        cooldown = 0.2f; 
     }
 
-    void Update()
-    {
-        if (Mouse.current == null) return;
+    public override bool WantsToActivate() =>
+        Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
 
-        if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= nextTimeToFire)
-        {
-            nextTimeToFire = Time.time + fireRate;
-            Shoot();
-        }
-    }
-
-    void Shoot()
+    protected override void Activate(Pawn owner)
     {
+        Transform cam = owner.cameraTransform;
+        if (cam == null) return;
+
         Debug.Log("Fired Weapon!");
 
-        Vector3 origin = playerCamera.transform.position;
-        Vector3 direction = playerCamera.transform.forward;
+        Vector3 origin = cam.position;
+        Vector3 direction = cam.forward;
 
         Debug.DrawRay(origin, direction * range, Color.red, 1f);
 
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, range))
+        RaycastHit[] hits = Physics.RaycastAll(origin, direction, range, hitMask, QueryTriggerInteraction.Ignore);
+        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (var hit in hits)
         {
+            if (hit.transform.IsChildOf(owner.transform)) continue;
+
             Debug.Log("Hit object: " + hit.transform.name);
 
             IDamageable target = hit.collider.GetComponentInParent<IDamageable>();
@@ -49,6 +45,7 @@ public class PlayerShoot : MonoBehaviour
                 target.TakeDamage(damage);
                 Debug.Log("Damaged " + hit.transform.name);
             }
+            break; 
         }
     }
 }

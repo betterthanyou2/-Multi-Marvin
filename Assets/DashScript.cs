@@ -1,60 +1,52 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerDash : MonoBehaviour
+public class PlayerDash : Ability
 {
-    public float dashForce = 15f;
+    public float dashForce = 25f;
     public float doubleTapTime = 0.3f;
-    public float dashCooldown = 1f;
+    [Tooltip("On: dash along the ground in the camera's facing direction. Off: also dash up/down with the camera's pitch.")]
+    public bool flattenToGround = true;
+    [Tooltip("Turn the body to face the dash direction.")]
+    public bool faceDashDirection = true;
 
-    private Rigidbody rb;
+    float lastPressTime = -1f;
 
-    private float lastPressTime = -1f;
-    private float nextDashTime = 0f;
-
-    void Start()
+    void Reset()
     {
-        rb = GetComponent<Rigidbody>();
-
-        if (rb == null)
-        {
-            Debug.LogError("Player needs a Rigidbody!");
-        }
+        cooldown = 1f;
     }
 
-    void Update()
+    public override bool WantsToActivate()
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            if (lastPressTime >= 0f &&
-                Time.time - lastPressTime <= doubleTapTime)
-            {
-                if (Time.time >= nextDashTime)
-                {
-                    Dash();
-                }
+        if (Keyboard.current == null || !Keyboard.current.spaceKey.wasPressedThisFrame)
+            return false;
 
-                lastPressTime = -1f;
-            }
-            else
-            {
-                lastPressTime = Time.time;
-            }
+        if (lastPressTime >= 0f && Time.time - lastPressTime <= doubleTapTime)
+        {
+            lastPressTime = -1f;
+            return true;
         }
+
+        lastPressTime = Time.time;
+        return false;
     }
 
-    void Dash()
+    protected override void Activate(Pawn owner)
     {
-        if (rb == null) return;
+        Transform cam = owner.cameraTransform != null ? owner.cameraTransform : owner.transform;
+
+        Vector3 flat = cam.forward;
+        flat.y = 0f;
+        if (flat.sqrMagnitude < 0.001f) flat = owner.transform.forward;
+        flat.Normalize();
+
+        Vector3 dashDir = flattenToGround ? flat : cam.forward.normalized;
+
+        if (faceDashDirection)
+            owner.transform.rotation = Quaternion.LookRotation(flat);
 
         Debug.Log("DASH!");
-
-        Vector3 direction = transform.forward;
-
-        rb.AddForce(direction * dashForce, ForceMode.Impulse);
-
-        nextDashTime = Time.time + dashCooldown;
+        owner.AddImpulse(dashDir * dashForce);
     }
 }
