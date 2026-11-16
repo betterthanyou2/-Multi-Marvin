@@ -671,6 +671,7 @@ GameObject:
   - component: {fileID: 1688212712}
   - component: {fileID: 1688212711}
   - component: {fileID: 1688212713}
+  - component: {fileID: 1688212714}
   m_Layer: 0
   m_Name: Marvin
   m_TagString: Player
@@ -867,6 +868,21 @@ MonoBehaviour:
   range: 100
   fireRate: 0.2
   playerCamera: {fileID: 330585545}
+--- !u!114 &1688212714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688212705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffb152d90560c364b98ab47960bad1e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  dashForce: 100
+  doubleTapTime: 0.3
+  dashCooldown: 1
 --- !u!1 &1929801306
 GameObject:
   m_ObjectHideFlags: 0
