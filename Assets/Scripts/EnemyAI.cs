@@ -5,7 +5,8 @@ using UnityEngine.AI;
 public enum EnemyState
 {
     Patrolling,
-    Following
+    Following,
+    Attacking
 }
 
 public class EnemyAI : MonoBehaviour
@@ -22,6 +23,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float detectionRange = 5f;
     [SerializeField] private float viewAngle = 90f;
     [SerializeField] private float losePlayerTime = 3f;
+    [SerializeField] private float attackRange = 1.2f;
 
     private NavMeshAgent agent;
     private Animator animator;
@@ -29,6 +31,7 @@ public class EnemyAI : MonoBehaviour
     private int currentPatrolIndex;
     private bool IsWaiting;
     private float timeSincePlayerLost;
+    private bool _isBiting;
 
     private void Awake()
     {
@@ -57,6 +60,11 @@ public class EnemyAI : MonoBehaviour
 
             case EnemyState.Following:
                 FollowPlayer();
+                if (distanceToPlayer <= attackRange)
+                {
+                    state = EnemyState.Attacking;
+                    StartAttack();
+                }
                 if (!CanSeePlayer())
                 {
                     timeSincePlayerLost += Time.deltaTime;
@@ -72,9 +80,42 @@ public class EnemyAI : MonoBehaviour
                 }
 
                 break;
+
+            case EnemyState.Attacking:
+                Attack();
+                if (!_isBiting && distanceToPlayer > attackRange)
+                {
+                    state = EnemyState.Following;
+                    agent.isStopped = false;
+                }
+
+                break;
         }
 
         UpdateAnimation();
+    }
+
+    private void StartAttack()
+    {
+        agent.isStopped = true;
+        _isBiting = true;
+        animator.SetTrigger("Bite");
+    }
+
+    private void Attack()
+    {
+        agent.isStopped = true;
+        var direction = (player.position - transform.position).normalized;
+        direction.y = 0f;
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+    }
+
+    private void OnBiteAnimationEnd()
+    {
+        _isBiting = false;
     }
 
     private void FollowPlayer()
