@@ -33,6 +33,37 @@ public class EnemyAI : MonoBehaviour
     private float timeSincePlayerLost;
     private bool _isBiting;
 
+
+public interface IDamageable
+{
+    void TakeDamage(float amount);
+}
+
+[RequireComponent(typeof(NavMeshAgent))]
+public class EnemyAI : MonoBehaviour, IDamageable
+{
+    private float currentHealth;
+    private bool isDead;
+    private enum State { Idle, Chase, Attack, Dead }
+
+    [Header("Stats")]
+    [SerializeField] private float maxHealth = 50f;
+    [SerializeField] private float moveSpeed = 3.5f;
+
+    [Header("Detection")]
+    [SerializeField] private float detectionRange = 12f;
+    [SerializeField] private float attackRange = 1.8f;
+    [SerializeField] private Transform target; 
+
+    [Header("Attack")]
+    [SerializeField] private float attackDamage = 10f;
+    [SerializeField] private float attackCooldown = 1.2f;
+
+    private NavMeshAgent agent;
+    private State state = State.Idle;
+    private float health;
+    private float lastAttackTime = -999f;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();

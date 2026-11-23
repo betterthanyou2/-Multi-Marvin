@@ -1,38 +1,45 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerLook : MonoBehaviour
+public class MouseLook : MonoBehaviour
 {
-    public float mouseSensitivity = 200f;
-    public Transform cam;
+    public float mouseSensitivity = 0.1f;
+
+    [Header("References")]
+    public Transform playerBody;
 
     private float xRotation = 0f;
-    private Vector2 lookInput;
+    private float yRotation = 0f;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+
+        if (playerBody != null)
+        {
+            yRotation = playerBody.localEulerAngles.y;
+        }
     }
+
     void Update()
     {
-        
-    }
+        if (Mouse.current == null) return;
 
-    public void OnLook(InputValue value) 
-    {
-        lookInput = value.Get<Vector2>();
-    }
+        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
 
-    void HandLeMouseLook() 
-    {
-        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime; 
-        float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
-        
+        float mouseX = mouseDelta.x * mouseSensitivity * Time.deltaTime * 100f;
+        float mouseY = mouseDelta.y * mouseSensitivity * Time.deltaTime * 100f;
+
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90, 90);
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        cam.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        yRotation += mouseX;
 
-        transform.Rotate(Vector3.up * mouseX);
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+        if (playerBody != null)
+        {
+            playerBody.localRotation = Quaternion.Euler(0f, yRotation, 0f);
+        }
     }
 }

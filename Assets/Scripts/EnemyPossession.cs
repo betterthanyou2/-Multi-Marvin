@@ -7,10 +7,9 @@ public class EnemyPossession : MonoBehaviour, IPossessable
     private Vector3 inputDirection;
     [SerializeField] private float speed = 5f;
 
-    // References to turn off when possessed
     private MonoBehaviour enemyAIBehaviorScript;
 
-    void Start() => enemyAIBehaviorScript = GetComponent<EnemyAI>(); // Your patrol/chase logic
+    void Start() => enemyAIBehaviorScript = GetComponent<EnemyAI>();
 
     public void OnPossess()
     {

@@ -1,25 +1,51 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerShoot : MonoBehaviour
+public class PlayerShoot : Ability
 {
-    public GameObject bulletPrefab;
-    public float bulletSpeed = 10f;
+    [Header("Shooting Settings")]
+    public float damage = 10f;
+    public float range = 100f;
+    [Tooltip("Layers the shot can hit.")]
+    public LayerMask hitMask = ~0;
 
-    private GameObject bulletSpawn;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Reset()
     {
-        bulletSpawn = GameObject.Find("BulletSpawn");
+        cooldown = 0.2f; 
     }
 
-    // Update is called once per frame
-    void Update()
+    public override bool WantsToActivate() =>
+        Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+
+    protected override void Activate(Pawn owner)
     {
-        if(Input.GetButtonDown("Fire1"))
+        Transform cam = owner.cameraTransform;
+        if (cam == null) return;
+
+        Debug.Log("Fired Weapon!");
+
+        Vector3 origin = cam.position;
+        Vector3 direction = cam.forward;
+
+        Debug.DrawRay(origin, direction * range, Color.red, 1f);
+
+        RaycastHit[] hits = Physics.RaycastAll(origin, direction, range, hitMask, QueryTriggerInteraction.Ignore);
+        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (var hit in hits)
         {
-            GameObject tempBullet = Instantiate(bulletPrefab, bulletSpawn.transform.position, Quaternion.identity);
-            tempBullet.GetComponent<Rigidbody>().linearVelocity = bulletSpawn.transform.up * bulletSpeed;
+            if (hit.transform.IsChildOf(owner.transform)) continue;
+
+            Debug.Log("Hit object: " + hit.transform.name);
+
+            IDamageable target = hit.collider.GetComponentInParent<IDamageable>();
+            if (target != null)
+            {
+                target.TakeDamage(damage);
+                Debug.Log("Damaged " + hit.transform.name);
+            }
+            break; 
         }
     }
 }
