@@ -40,11 +40,17 @@ public interface IDamageable
 }
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyAI : MonoBehaviour, IDamageable
+public class enemyAI : MonoBehaviour, IDamageable
 {
     private float currentHealth;
     private bool isDead;
-    private enum State { Idle, Chase, Attack, Dead }
+    public enum State 
+    { 
+            Idle, 
+            Chase, 
+            Attack, 
+            Dead 
+    }
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 50f;
@@ -60,14 +66,40 @@ public class EnemyAI : MonoBehaviour, IDamageable
     [SerializeField] private float attackCooldown = 1.2f;
 
     private NavMeshAgent agent;
-    private State state = State.Idle;
+        private Animator animator;
+        private State state = State.Idle;
     private float health;
     private float lastAttackTime = -999f;
+        private float timeSincePlayerLost;
+        private float losePlayerTime;
+        private bool _isBiting;
 
-    private void Awake()
+        public bool IsWaiting { get; private set; }
+
+        public enemyAI(float currentHealth, bool isDead, float maxHealth, float moveSpeed, float detectionRange, float attackRange, Transform target, float attackDamage, float attackCooldown, NavMeshAgent agent, Animator animator, State state, float health, float lastAttackTime, float timeSincePlayerLost, float losePlayerTime)
+        {
+            this.currentHealth = currentHealth;
+            this.isDead = isDead;
+            this.maxHealth = maxHealth;
+            this.moveSpeed = moveSpeed;
+            this.detectionRange = detectionRange;
+            this.attackRange = attackRange;
+            this.target = target;
+            this.attackDamage = attackDamage;
+            this.attackCooldown = attackCooldown;
+            this.agent = agent;
+            this.animator = animator;
+            this.state = state;
+            this.health = health;
+            this.lastAttackTime = lastAttackTime;
+            this.timeSincePlayerLost = timeSincePlayerLost;
+            this.losePlayerTime = losePlayerTime;
+        }
+
+        private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -81,27 +113,27 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
         switch (state)
         {
-            case EnemyState.Patrolling:
+            case (State)EnemyState.Patrolling:
                 Patrol();
                 if (distanceToPlayer <= detectionRange && CanSeePlayer())
                 {
-                    state = EnemyState.Following;
+                    state = (State)EnemyState.Following;
                 }
                 break;
 
-            case EnemyState.Following:
+            case (State)EnemyState.Following:
                 FollowPlayer();
                 if (distanceToPlayer <= attackRange)
                 {
-                    state = EnemyState.Attacking;
+                    state = (State)EnemyState.Attacking;
                     StartAttack();
                 }
                 if (!CanSeePlayer())
                 {
-                    timeSincePlayerLost += Time.deltaTime;
+                        timeSincePlayerLost += Time.deltaTime;
                     if (timeSincePlayerLost >= losePlayerTime)
                     {
-                        state = EnemyState.Patrolling;
+                        state = (State)EnemyState.Patrolling;
                         GoToClosestPatrolPoint();
                     }          
                 }
@@ -112,11 +144,11 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
                 break;
 
-            case EnemyState.Attacking:
+            case (State)EnemyState.Attacking:
                 Attack();
                 if (!_isBiting && distanceToPlayer > attackRange)
                 {
-                    state = EnemyState.Following;
+                    state = (State)EnemyState.Following;
                     agent.isStopped = false;
                 }
 
@@ -172,7 +204,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
         agent.isStopped = false;
         GoToNextPatrolPoint();
-        IsWaiting = false;
+            IsWaiting = false;
     }
 
     private void GoToClosestPatrolPoint()
@@ -231,4 +263,9 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
         return true;
     }
+
+        public void TakeDamage(float amount)
+        {
+            throw new System.NotImplementedException();
+        }
 }
